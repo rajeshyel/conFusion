@@ -18,6 +18,7 @@ export class DishdetailComponent implements OnInit {
 
   dish: Dish;
   errMess: string;
+  dishcopy: Dish;
   //created for exploring more on observables
   dishIds: string[];
   prev: string;
@@ -53,15 +54,16 @@ export class DishdetailComponent implements OnInit {
     private fb:FormBuilder,
     @Inject('BaseURL') private BaseURL) {
       this.createForm();
+      this.comment=new Comment();
      }
 
   ngOnInit() {
     this.dishservice.getDishIds().subscribe(dishIds => this.dishIds = dishIds);
     
-    this.route.params.pipe(switchMap((params: Params) => this.dishservice.getDish(params['id'])))
-    .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id); },
-    errmess=>this.errMess=<any>errmess);
-    this.comment=new Comment();
+    this.route.params
+      .pipe(switchMap((params: Params) => this.dishservice.getDish(params['id'])))
+      .subscribe(dish => { this.dish = dish; this.dishcopy = dish; this.setPrevNext(dish.id); },
+        errmess => this.errMess = <any>errmess );
     
   }
 
@@ -111,6 +113,14 @@ export class DishdetailComponent implements OnInit {
     this.comment.date=new Date().toISOString();
     this.dish.comments.push(this.comment);
     this.comment=new Comment(); //reset the comment object
+
+    this.dishcopy.comments.push(this.comment);
+    this.dishservice.putDish(this.dishcopy)
+      .subscribe(dish => {
+        this.dish = dish; this.dishcopy = dish;
+      },
+      errmess => { this.dish = null; this.dishcopy = null; this.errMess = <any>errmess; });
+
     this.commentForm.reset({
       author: '',
       comment: '',

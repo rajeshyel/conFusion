@@ -15,12 +15,13 @@ export class HomeComponent implements OnInit {
 
   //declare two variables
   dish: Dish;
+  dishErrMess:string;
   promotion: Promotion;
   leader: Leader;
 
   constructor(private dishService:DishService,
     private promotionService:PromotionService,
-    private leaderService:LeaderService
+    private leaderService:LeaderService,
     @Inject('BaseURL') private BaseURL
     )
    { }
@@ -32,7 +33,8 @@ export class HomeComponent implements OnInit {
     this.leader=this.leaderService.getFeaturedLeader();
     */
     //updating methods to use promises
-    this.dishService.getFeaturedDish().subscribe((dish)=>this.dish=dish);
+    this.dishService.getFeaturedDish().subscribe((dish)=>this.dish=dish,
+    errmess=>this.dishErrMess=<any>errmess);
     this.promotionService.getFeaturedPromotion().subscribe((promotion)=>this.promotion=promotion);
     this.leaderService.getFeaturedLeader().subscribe((leader)=>this.leader=leader);
   }

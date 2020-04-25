@@ -138,7 +138,7 @@ export class DishdetailComponent implements OnInit {
     });
     
     this.commentFormDirective.resetForm();
-    this.defaultMatSlideVal=5;
+    this.defaultMatSlideVal=5; //default slider value
   }
 
   setPrevNext(dishId: string) {

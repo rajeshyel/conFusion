@@ -36,11 +36,30 @@
     </div>
   </div>
 
-  <div fxFlex fxFlexOffset="20px" class="form-size">
+  <div [hidden]="!showSpinner" >
+    <mat-spinner></mat-spinner><h4>Submitting ur feedback . . . Please Wait</h4>
+  </div>
+
+  <div *ngIf="showResponseCopy" [@expand]>
+    <h3>Yout Submisssion</h3>
+    <p>First Name: {{responseFbFromServer.firstname}}</p>
+    <p>Last Name: {{responseFbFromServer.lastname}}</p>
+    <p>Tel.Num: {{responseFbFromServer.telnum}}</p>
+    <p>Email: {{responseFbFromServer.email}}</p>
+    <p>Contact you?: {{responseFbFromServer.agree}}</p>
+    <p>How?: {{responseFbFromServer.contacttype}}</p>
+    <p>Feedback: {{responseFbFromServer.message}}</p>
+  </div>
+
+  <div fxFlex fxFlexOffset="20px" class="form-size" *ngIf="showFbForm" [@expand]>
     <h3>Send us your Feedback</h3>
+    <!--
     <p>{{ feedbackForm.value | json }} {{ feedbackForm.status | json }}</p>
+    -->
+
 
     <form novalidate [formGroup]="feedbackForm" #fform="ngForm" (ngSubmit)="onSubmit()">
+      
       <p>
         <mat-form-field class="half-width">
           <input matInput formControlName="firstname" placeholder="First Name" type="text" required>
@@ -80,5 +99,9 @@
       </p>
       <button type="submit" mat-button class="background-primary text-floral-white">Submit</button>
     </form>
+
+    
+
+
   </div>
 </div>

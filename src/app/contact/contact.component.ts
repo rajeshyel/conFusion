@@ -1,12 +1,24 @@
 import { Component, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Feedback, ContactType } from '../shared/feedback';
 import { ViewChild } from '@angular/core';
+
+import { Feedback, ContactType } from '../shared/feedback';
+import {FeedbackService} from '../services/feedback.service';
+
+import { flyInOut, expand } from '../animations/app.animation';
 
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.scss']
+  styleUrls: ['./contact.component.scss'],
+  host: {
+    '[@flyInOut]': 'true',
+    'style': 'display: block;'
+    },
+    animations: [
+      flyInOut(),
+      expand()
+    ]
 })
 export class ContactComponent implements OnInit {
   
@@ -14,7 +26,12 @@ export class ContactComponent implements OnInit {
   
   feedbackForm: FormGroup;
   feedback: Feedback;
+  responseFbFromServer: Feedback;
+  feedbackErrMess:string;
   contactType = ContactType;
+  showSpinner:boolean;
+  showResponseCopy:boolean;
+  showFbForm:boolean;
 
   formErrors = {
     'firstname': '',
@@ -44,8 +61,11 @@ export class ContactComponent implements OnInit {
     },
   };
 
-  constructor(private fb: FormBuilder) { 
+  constructor(private fb: FormBuilder,private feedbackService:FeedbackService) { 
     this.createForm();
+    this.showSpinner=false;
+    this.showResponseCopy=false;
+    this.showFbForm=true;
   }
 
   ngOnInit() {
@@ -92,7 +112,25 @@ export class ContactComponent implements OnInit {
 
   onSubmit(){
     this.feedback = this.feedbackForm.value;
-    console.log(this.feedback);
+    this.showFbForm=false;
+    //console.log(this.feedback);
+    this.showSpinner=true;
+    this.feedbackService.submitFeedback(this.feedback)
+      .subscribe(
+        (feedback) =>{
+          this.responseFbFromServer = feedback;
+          this.showSpinner=false;
+          this.showResponseCopy=true;
+          console.log(this.responseFbFromServer);
+          setTimeout(()=>
+          {
+            this.showResponseCopy=false;this.showFbForm=true;
+          },5000);
+        },
+      errmess => (this.feedbackErrMess=<any>errmess));
+    
+    
+
     this.feedbackForm.reset({
       firstname: '',
       lastname: '',

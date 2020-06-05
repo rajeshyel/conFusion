@@ -1,3 +1,5 @@
+**This repo contains all the code related to Front-End Javascript Frameworks: Angular from Coursera. Each and every assignment is committed individually
+
 # ConFusion
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.1.

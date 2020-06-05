@@ -1,4 +1,4 @@
-**This repo contains all the code related to Front-End Javascript Frameworks: Angular from Coursera. Each and every assignment is committed individually
+** This repo contains all the code related to Front-End Javascript Frameworks: Angular from Coursera. Each and every assignment is committed individually
 
 # ConFusion
 
